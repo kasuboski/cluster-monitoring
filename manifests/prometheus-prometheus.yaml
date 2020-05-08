@@ -25,7 +25,7 @@ spec:
     - name: alertmanager-main
       namespace: monitoring
       port: web
-  externalUrl: http://prometheus.192.168.15.15.nip.io
+  externalUrl: http://prometheus
   image: prom/prometheus:v2.16.0
   nodeSelector:
     kubernetes.io/os: linux

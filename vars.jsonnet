@@ -12,7 +12,7 @@
     },
     {
       name: 'armExporter',
-      enabled: false,
+      enabled: true,
       file: import 'arm_exporter.jsonnet',
     },
     {
@@ -38,12 +38,12 @@
   ],
 
   k3s: {
-    enabled: false,
-    master_ip: ['192.168.15.15'],
+    enabled: true,
+    master_ip: ['10.64.205.130'],
   },
 
   // Domain suffix for the ingresses
-  suffixDomain: '192.168.15.15.nip.io',
+  suffixDomain: '',
   // If TLSingress is true, a self-signed HTTPS ingress with redirect will be created
   TLSingress: true,
   // If UseProvidedCerts is true, provided files will be used on created HTTPS ingresses.

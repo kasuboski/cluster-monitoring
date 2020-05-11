@@ -16,7 +16,9 @@ spec:
         app: grafana
     spec:
       containers:
-      - env: []
+      - env:
+        - name: GF_INSTALL_PLUGINS
+          value: grafana-piechart-panel
         image: grafana/grafana:6.6.2
         name: grafana
         ports:
@@ -45,6 +47,9 @@ spec:
           readOnly: false
         - mountPath: /grafana-dashboard-definitions/0/apiserver
           name: grafana-dashboard-apiserver
+          readOnly: false
+        - mountPath: /grafana-dashboard-definitions/0/blocky-dashboard
+          name: grafana-dashboard-blocky-dashboard
           readOnly: false
         - mountPath: /grafana-dashboard-definitions/0/cluster-total
           name: grafana-dashboard-cluster-total
@@ -142,6 +147,9 @@ spec:
       - configMap:
           name: grafana-dashboard-apiserver
         name: grafana-dashboard-apiserver
+      - configMap:
+          name: grafana-dashboard-blocky-dashboard
+        name: grafana-dashboard-blocky-dashboard
       - configMap:
           name: grafana-dashboard-cluster-total
         name: grafana-dashboard-cluster-total

@@ -39,9 +39,11 @@ local vars = import 'vars.jsonnet';
       'kubernetes-cluster-dashboard.json': (import 'grafana-dashboards/kubernetes-cluster-dashboard.json'),
       'prometheus-dashboard.json': (import 'grafana-dashboards/prometheus-dashboard.json'),
       'coredns-dashboard.json': (import 'grafana-dashboards/coredns-dashboard.json'),
+      'blocky-dashboard.json': (import 'grafana-dashboards/blocky-dashboard.json'),
     },
 
     grafana+:: {
+      plugins: ['grafana-piechart-panel'],
       config: {
         sections: {
           session: { provider: 'memory' },
@@ -187,8 +189,8 @@ local vars = import 'vars.jsonnet';
   //       // First generate the auth secret with gen_auth.sh script
   //       secret.new('basic-auth', { auth: std.base64(importstr 'auth') }) +
   //       secret.mixin.metadata.withNamespace($._config.namespace),
-  // } + if vars.UseProvidedCerts then {
-  //   secret:
-  //     utils.newTLSSecret('ingress-TLS-secret', $._config.namespace, vars.TLSCertificate, vars.TLSKey),
-  // } else {},
+  } + if vars.UseProvidedCerts then {
+    secret:
+      utils.newTLSSecret('ingress-TLS-secret', $._config.namespace, vars.TLSCertificate, vars.TLSKey),
+  } else {},
 }

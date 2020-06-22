@@ -47,7 +47,7 @@ local vars = import 'vars.jsonnet';
       config: {
         sections: {
           session: { provider: 'memory' },
-          'auth': { disable_login_form: true },
+          auth: { disable_login_form: true },
           'auth.basic': { enabled: false },
           'auth.anonymous': { enabled: true, org_name: 'Main Org.', org_role: 'Viewer' },
           smtp: {
@@ -72,9 +72,14 @@ local vars = import 'vars.jsonnet';
     local pvc = k.core.v1.persistentVolumeClaim,
     prometheus+: {
       spec+: {
-               replicas: $._config.prometheus.replicas,
-               retention: '15d',
-               externalUrl: 'http://' + $._config.urls.prom_ingress,
+                replicas: $._config.prometheus.replicas,
+                retention: '5d',
+                externalUrl: 'http://' + $._config.urls.prom_ingress,
+                resources+: {
+                  limits: {
+                    memory: '2Gi',
+                  },
+                },
              }
              + (if vars.enablePersistence.prometheus then {
                   storage: {
@@ -161,34 +166,34 @@ local vars = import 'vars.jsonnet';
     //     I,
 
     // Example external ingress with authentication
-  //   'grafana-external':
-  //       local ingress = k.extensions.v1beta1.ingress;
-  //       local ingressRule = ingress.mixin.spec.rulesType;
-  //       local httpIngressPath = ingressRule.mixin.http.pathsType;
-  //       ingress.new() +
-  //       ingress.mixin.metadata.withName('grafana-external') +
-  //       ingress.mixin.metadata.withNamespace($._config.namespace) +
-  //       ingress.mixin.metadata.withLabels({'traffic-type': 'external'}) +
-  //       ingress.mixin.metadata.withAnnotations({
-  //         'nginx.ingress.kubernetes.io/server-alias': 'grafana.*',
-  //         'ingress.kubernetes.io/auth-type': 'basic',
-  //         'ingress.kubernetes.io/auth-secret': 'basic-auth',
-  //       }) +
-  //       ingress.mixin.spec.withRules(
-  //           ingressRule.new() +
-  //           ingressRule.withHost($._config.urls.grafana_ingress_external) +
-  //           ingressRule.mixin.http.withPaths(
-  //               httpIngressPath.new() +
-  //               httpIngressPath.withPath('/') +
-  //               httpIngressPath.mixin.backend.withServiceName('grafana') +
-  //               httpIngressPath.mixin.backend.withServicePort('http')
-  //           ),
-  //       ),
-  //   'basic-auth-secret':
-  //       local secret = k.core.v1.secret;
-  //       // First generate the auth secret with gen_auth.sh script
-  //       secret.new('basic-auth', { auth: std.base64(importstr 'auth') }) +
-  //       secret.mixin.metadata.withNamespace($._config.namespace),
+    //   'grafana-external':
+    //       local ingress = k.extensions.v1beta1.ingress;
+    //       local ingressRule = ingress.mixin.spec.rulesType;
+    //       local httpIngressPath = ingressRule.mixin.http.pathsType;
+    //       ingress.new() +
+    //       ingress.mixin.metadata.withName('grafana-external') +
+    //       ingress.mixin.metadata.withNamespace($._config.namespace) +
+    //       ingress.mixin.metadata.withLabels({'traffic-type': 'external'}) +
+    //       ingress.mixin.metadata.withAnnotations({
+    //         'nginx.ingress.kubernetes.io/server-alias': 'grafana.*',
+    //         'ingress.kubernetes.io/auth-type': 'basic',
+    //         'ingress.kubernetes.io/auth-secret': 'basic-auth',
+    //       }) +
+    //       ingress.mixin.spec.withRules(
+    //           ingressRule.new() +
+    //           ingressRule.withHost($._config.urls.grafana_ingress_external) +
+    //           ingressRule.mixin.http.withPaths(
+    //               httpIngressPath.new() +
+    //               httpIngressPath.withPath('/') +
+    //               httpIngressPath.mixin.backend.withServiceName('grafana') +
+    //               httpIngressPath.mixin.backend.withServicePort('http')
+    //           ),
+    //       ),
+    //   'basic-auth-secret':
+    //       local secret = k.core.v1.secret;
+    //       // First generate the auth secret with gen_auth.sh script
+    //       secret.new('basic-auth', { auth: std.base64(importstr 'auth') }) +
+    //       secret.mixin.metadata.withNamespace($._config.namespace),
   } + if vars.UseProvidedCerts then {
     secret:
       utils.newTLSSecret('ingress-TLS-secret', $._config.namespace, vars.TLSCertificate, vars.TLSKey),

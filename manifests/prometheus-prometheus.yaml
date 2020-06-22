@@ -33,9 +33,11 @@ spec:
   podMonitorSelector: {}
   replicas: 1
   resources:
+    limits:
+      memory: 2Gi
     requests:
       memory: 400Mi
-  retention: 15d
+  retention: 5d
   ruleSelector:
     matchLabels:
       prometheus: k8s

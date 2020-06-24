@@ -86,9 +86,9 @@ local vars = import 'vars.jsonnet';
                     volumeClaimTemplate:
                       pvc.new() +
                       pvc.mixin.spec.withAccessModes('ReadWriteOnce') +
-                      pvc.mixin.spec.resources.withRequests({ storage: '20Gi' }),
-                    // Uncomment below to define a StorageClass name
-                    //+ pvc.mixin.spec.withStorageClassName('nfs-master-ssd'),
+                      pvc.mixin.spec.resources.withRequests({ storage: '20Gi' }) +
+                      // Uncomment below to define a StorageClass name
+                      pvc.mixin.spec.withStorageClassName('openebs-cstor-1-replica-disk'),
                   },
                 } else {}),
     },

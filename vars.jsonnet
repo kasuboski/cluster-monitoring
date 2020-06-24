@@ -54,7 +54,7 @@
 
   // Setting these to false, defaults to emptyDirs
   enablePersistence: {
-    prometheus: false,
+    prometheus: true,
     grafana: false,
   },
 

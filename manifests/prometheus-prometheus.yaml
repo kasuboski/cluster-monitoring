@@ -7,6 +7,13 @@ metadata:
   namespace: monitoring
 spec:
   affinity:
+    nodeAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+      - preference:
+          matchExpressions:
+          - key: node-role.kubernetes.io/master
+            operator: DoesNotExist
+        weight: 10
     podAntiAffinity:
       preferredDuringSchedulingIgnoredDuringExecution:
       - podAffinityTerm:

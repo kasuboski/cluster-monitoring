@@ -80,6 +80,23 @@ local vars = import 'vars.jsonnet';
                     memory: '2Gi',
                   },
                 },
+                affinity+: {
+                  nodeAffinity: {
+                    preferredDuringSchedulingIgnoredDuringExecution: [
+                      {
+                        weight: 10,
+                        preference: {
+                          matchExpressions: [
+                            {
+                              key: 'node-role.kubernetes.io/master',
+                              operator: 'DoesNotExist',
+                            },
+                          ],
+                        },
+                      },
+                    ],
+                  },
+                },
              }
              + (if vars.enablePersistence.prometheus then {
                   storage: {

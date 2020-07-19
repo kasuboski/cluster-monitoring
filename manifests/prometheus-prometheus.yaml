@@ -66,5 +66,5 @@ spec:
         resources:
           requests:
             storage: 20Gi
-        storageClassName: openebs-cstor-1-replica-disk
+        storageClassName: openebs-device
   version: v2.16.0

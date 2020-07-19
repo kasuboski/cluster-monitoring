@@ -46,6 +46,7 @@ local vars = import 'vars.jsonnet';
       plugins: ['grafana-piechart-panel'],
       config: {
         sections: {
+          users: { default_theme: 'light' },
           session: { provider: 'memory' },
           auth: { disable_login_form: true },
           'auth.basic': { enabled: false },
@@ -105,7 +106,7 @@ local vars = import 'vars.jsonnet';
                       pvc.mixin.spec.withAccessModes('ReadWriteOnce') +
                       pvc.mixin.spec.resources.withRequests({ storage: '20Gi' }) +
                       // Uncomment below to define a StorageClass name
-                      pvc.mixin.spec.withStorageClassName('openebs-cstor-1-replica-disk'),
+                      pvc.mixin.spec.withStorageClassName('openebs-device'),
                   },
                 } else {}),
     },
